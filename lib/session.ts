@@ -14,14 +14,21 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         })
     ],
-    // jwt: {
-    //     encode: ({ secret, token }) => {
+    jwt: {
+        encode: ({ secret, token }) => {
+            const encodeToken = jsonwebtoken.sign({
+                ...token,
+                iss: 'grafbase',
+                exp: Math.floor(Date.now() / 1000) + 60 * 60
+            }, secret)
+            return encodeToken
+        },
+        decode: async ({ secret, token }) => {
+            const decodedToken = jsonwebtoken.verify(token!, secret) as JWT
 
-    //     },
-    //     decode: async ({ secret, token }) => {
-
-    //     }
-    // },
+            return decodedToken;
+        }
+    },
     theme: {
         colorScheme: 'light',
         logo: '/logo-black.png'
@@ -40,11 +47,11 @@ export const authOptions: NextAuthOptions = {
                         ...data?.user
                     }
                 }
+                return newSession;
             } catch (error) {
-                
+                console.log('Error retrieving data', error);
+                return session
             }
-
-            return session
         },
         async signIn({ user }: {user: AdapterUser | User}) {
             try {

@@ -17,10 +17,12 @@ const makeGarphQLRequest = async (query: string, variables = {}) => {
 }
 
 export const getUser = (email: string) => {
+    client.setHeader('x-api-key', apiKey)
     return makeGarphQLRequest(getUserQuery, { email })
 }
 
 export const createUser = (name: string, email: string, avatarUrl: string) => {
+    client.setHeader('x-api-key', apiKey)
     const variables = {
         input: {
             name,
