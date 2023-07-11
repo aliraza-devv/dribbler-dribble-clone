@@ -27,6 +27,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "@grafbase/sdk": "^0.1.0"
+    "@grafbase/sdk": "^0.1.0",
+    "encoding": "^0.1.13"
   }
 }
